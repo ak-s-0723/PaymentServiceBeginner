@@ -2,18 +2,20 @@ package org.example.paymentservicebeginner.paymentgateways;
 
 import com.razorpay.PaymentLink;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.json.JSONObject;
 import com.razorpay.Payment;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 
-@Component
-public class RazorpayPaymentGateway {
+@Component("razorpay")
+public class RazorpayPaymentGateway implements IPaymentGateway {
 
     @Autowired
     private RazorpayClient razorpayClient;
 
+    @Override
     public String getPaymentLink(String email,String name, String phoneNumber,String orderId, Long amount) {
         try {
             JSONObject paymentLinkRequest = new JSONObject();
@@ -37,7 +39,7 @@ public class RazorpayPaymentGateway {
             JSONObject notes = new JSONObject();
             notes.put("policy_name", "Jeevan Bima");
             paymentLinkRequest.put("notes", notes);
-            paymentLinkRequest.put("callback_url", "https://example-callback-url.com/");
+            paymentLinkRequest.put("callback_url", "https://scaler.com/");
             paymentLinkRequest.put("callback_method", "get");
 
             PaymentLink payment = razorpayClient.paymentLink.create(paymentLinkRequest);
